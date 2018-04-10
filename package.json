@@ -1,0 +1,32 @@
+{
+  "name": "react-echarts-demo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "nodemon --exec yarn run dev-start",
+    "dev-start": "babel-node ./server/server.js",
+    "build": "parcel build index.html -d ./dist --public-url ./"
+  },
+  "dependencies": {
+    "antd": "^3.4.0",
+    "echarts": "^4.0.4",
+    "echarts-for-react": "^2.0.8",
+    "koa": "^2.5.0",
+    "koa-logger": "^3.2.0",
+    "koa-static": "^4.0.2",
+    "koa-views": "^6.1.4",
+    "moment": "^2.22.0",
+    "mysql": "^2.15.0",
+    "react": "^16.3.0",
+    "react-dom": "^16.3.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-preset-react": "^6.24.1",
+    "nodemon": "^1.17.3",
+    "parcel-bundler": "^1.7.0",
+    "rimraf": "^2.6.2"
+  }
+}
