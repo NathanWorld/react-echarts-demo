@@ -11,15 +11,12 @@ const selectBatchInfo = (batch) => {
   return db.query(_sql, batch)
 }
 const selectAllBatch = () => {
-  const _sql = "select * from tb_batch"
+  const _sql = "select batch, start, end from tb_batch"
   return db.query(_sql)
-}
-const selectBatchHisdata = async (batch) => {
-  await selectBatchInfo(batch)
 }
 
 module.exports = {
   insertBatch,
   selectBatchInfo,
-  selectAllBatch
+  selectAllBatch,
 }

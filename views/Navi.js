@@ -4,7 +4,10 @@ import 'antd/dist/antd.css'
 import logo from '../public/images/logo.svg'
 import '../public/css/Navi.css'
 //import TreeCompontent from './Tree'
-import Simple from './Simple'
+//import Simple from './Simple'
+
+import batchModel from '../util/batchModel'
+import hisdataModel from '../util/hisdataModel'
 
 const { Header, Content, Footer, Sider } = Layout
 
@@ -42,19 +45,28 @@ class SiderDemo extends Component {
             mode="inline" 
             defaultSelectedKeys={['']}
           >
-            <SubMenu key="sub1" title={<span><Icon type="mail" /><span>1#-2016</span></span>}>
+            <SubMenu 
+              key="sub1" 
+              title={<span><Icon type="mail" /><span>1#-2016</span></span>}
+            >
               <Menu.Item key="sub1-1"><Checkbox>批次1</Checkbox></Menu.Item>
               <Menu.Item key="sub1-2"><Checkbox>批次2</Checkbox></Menu.Item>
               <Menu.Item key="sub1-3"><Checkbox>批次3</Checkbox></Menu.Item>
               <Menu.Item key="sub1-4"><Checkbox>批次4</Checkbox></Menu.Item>
             </SubMenu>
-            <SubMenu key="sub2" title={<span><Icon type="mail" /><span>1#-2017</span></span>}>
+            <SubMenu 
+              key="sub2" 
+              title={<span><Icon type="mail" /><span>1#-2017</span></span>}
+            >
               <Menu.Item key="sub2-1"><Checkbox>批次1</Checkbox></Menu.Item>
               <Menu.Item key="sub2-2"><Checkbox>批次2</Checkbox></Menu.Item>
               <Menu.Item key="sub2-3"><Checkbox>批次3</Checkbox></Menu.Item>
               <Menu.Item key="sub2-4"><Checkbox>批次4</Checkbox></Menu.Item>
             </SubMenu> 
-            <SubMenu key="sub3" title={<span><Icon type="mail" /><span>1#-2018</span></span>}>
+            <SubMenu 
+              key="sub3" 
+              title={<span><Icon type="mail" /><span>1#-2018</span></span>}
+            >
               <Menu.Item key="sub3-1"><Checkbox>批次1</Checkbox></Menu.Item>
               <Menu.Item key="sub3-2"><Checkbox>批次2</Checkbox></Menu.Item>
               <Menu.Item key="sub3-3"><Checkbox>批次3</Checkbox></Menu.Item>
