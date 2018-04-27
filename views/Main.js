@@ -29,7 +29,7 @@ class SiderDemo extends Component {
       })
   }
   async getBatchHisdata(batch) {
-    const url = 'http//localhost:3000/batches/' + batch
+    const url = 'http://localhost:3000/batches/' + batch
     await fetch(url)
       .then(res => res.json())
       .then(hisdata => {

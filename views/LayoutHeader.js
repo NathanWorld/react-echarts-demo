@@ -19,7 +19,7 @@ class LayoutHeader extends Component {
             style={{ cursor: 'pointer' }}
           />
         </span>
-        <span style={{ color: '#fff', paddingLeft: '2%', fontSize: '1.4em' }}>自动化数据可视化系统</span>
+        <span style={{ color: '#fff', paddingLeft: '2%', fontSize: '1.4em' }}>生产过程数据可视化系统</span>
         <span style={{ color: '#fff', float: 'right', paddingRight: '1%' }}>
           <img src={logo} className="App-logo" alt="logo" />
         </span>

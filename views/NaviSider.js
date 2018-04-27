@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Layout, Menu, Icon, Checkbox } from 'antd'
 import logo from '../public/images/logo.svg'
+import emitter from '../util/events'
 
 const SubMenu = Menu.SubMenu
 const { Sider } = Layout
@@ -9,8 +10,18 @@ class NaviSider extends Component {
   constructor(props) {
     super(props)
   }
-  handleChecked(e, value) {
-    if (e.target.checked) alert(value)
+  handleChecked(e, batch) {
+    if (e.target.checked) {
+      this.handleCheckedClick(batch)
+    } else if (!e.target.checked) {
+      this.handleUncheckedClick(batch)
+    }
+  }
+  handleCheckedClick(batch) {
+    emitter.emit('checked', batch)
+  }
+  handleUncheckedClick(batch) {
+    emitter.emit('unchecked', batch)
   }
 
   render() {
@@ -35,7 +46,11 @@ class NaviSider extends Component {
             {
               this.props.batches.map((batch, index) => 
                 <Menu.Item key={batch.batch}>
-                  <Checkbox onChange={(e) => this.handleChecked(e, batch.batch)}>{batch.batch}</Checkbox>
+                  <Checkbox 
+                    onChange={(e) => this.handleChecked(e, batch.batch)}
+                  >
+                    {batch.batch}
+                  </Checkbox>
                 </Menu.Item>
               )
             }
