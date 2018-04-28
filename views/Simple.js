@@ -12,33 +12,37 @@ const initData = [
   {'datatime':'2018-04-10T07:04:00Z', 'TI301AI':'23.35',  'DO301AI':'63.89',  'PH301AI':'6.45',   'FI301AI':'9.39', 'PI301AI': '0.205'},
   {'datatime':'2018-04-10T07:05:00Z', 'TI301AI':'17.67',  'DO301AI':'62.91',  'PH301AI':'6.45',   'FI301AI':'9.39', 'PI301AI': '0.205'},
 ] 
-const hisDataSet = []
-const chartInitData = {
-  name: 'init',
-  data: initData
-}
-hisDataSet.push(chartInitData)
+// 缓存的批次数据
+let cacheDataset = []
+// 图表中要显示的数据
+let chartDataset = []
+// timestamp: moment(),
+// TODO: 加入时间戳比对功能，超时之后能刷新缓存中的数据
+// TODO: 限定缓存列表中的数量
+chartDataset = chartDataset.concat(initData)
 
 export default class Simple extends Component {
   constructor(props) {
     super(props)
     this.state = {
       loading: false,
-      dataSet: initData
+      // dataSet: 用于 Chart 显示的数据集
+      dataSet: chartDataset
     }
     this.getBatchHisdata = this.getBatchHisdata.bind(this)
     this.getOption = this.getOption.bind(this)
     this.onChartReady = this.onChartReady.bind(this)
+    this.updateChartData = this.updateChartData.bind(this)
   }
   componentDidMount() {
     this.eventEmitterChecked = emitter.addListener('checked', (batch) => {
-      this.setState({
-        loading: true
-      })
+      this.setState({ loading: true })
       this.getBatchHisdata(batch)
     })
     this.eventEmitterUnchecked = emitter.addListener('unchecked', (batch) => {
-      alert('unchecked: ' + batch)
+      this.setState({ loading: true })
+      this.uncheckedBatchHisdata(batch) 
+      this.updateChartData()
     })
   }
 
@@ -47,19 +51,57 @@ export default class Simple extends Component {
     await fetch(url)
       .then(res => res.json())
       .then(hisdata => {
-        this.setState({
-          // dataSet: this.BuildData(hisdata),
-          dataSet: hisdata,
-          loading: false
-        })
+        this.checkedBatchHisdata(batch, hisdata)
+        this.updateChartData()
       })
-      console.log(this.state.dataSet.length)
+  }
+  checkedBatchHisdata(batch, hisdata) {
+    let flag = false
+    // 如果该批次历史数据已经缓存起来了，则设置为true
+    for (let i = 0, len = cacheDataset.length; i < len; i++) {
+      if (cacheDataset[i].batch === batch) {
+        cacheDataset[i].checked = true
+        return
+      }
+    }
+    // 没有缓存则添加
+    let newData = new Object()
+    newData.batch = batch
+    newData.data = hisdata
+    newData.checked = true
+    cacheDataset.push(newData)
+  }
+  uncheckedBatchHisdata(batch) {
+    for (let i = 0, len = cacheDataset.length; i < len; i++) {
+      if (cacheDataset[i].batch === batch) {
+        cacheDataset[i].checked = false
+        break
+      }
+    }
+  }
+  updateChartData() {
+    let hasCheckedFlag = false
+    chartDataset.splice(0, chartDataset.length)
+    for (let i = 0, len = cacheDataset.length; i < len; i++) {
+      if (cacheDataset[i].checked) {
+        hasCheckedFlag = true
+        chartDataset = chartDataset.concat(cacheDataset[i].data)
+      }
+    }
+    if (!hasCheckedFlag) {
+      chartDataset = chartDataset.concat(initData)
+    }
+    this.setState({
+      loading: false,
+      dataSet: chartDataset
+    })
   }
   componentWillUnmount() {
     emitter.removeListener(this.eventEmitterChecked)
     emitter.removeListener(this.eventEmitterUnchecked)
   }
   
+  // 已去除，不需要
   BuildData(hisdata) {
     // let hisdate = JSON.parse(sourceHisdata)
     let data = []
@@ -84,17 +126,6 @@ export default class Simple extends Component {
     return data
   }
 
-  DemoBuildData() {
-    let data = [
-      ['datetime', 'tag1', 'tag2', 'tag3', 'tag4'],
-      ['2018-04-10 07:00:00', '14.87',  '52.91',  '6.45',   '9.39'],
-      ['2018-04-10 07:01:00',	'62.13', 	'97.09', 	'76.78', 	'19.26'],
-      ['2018-04-10 07:02:00',	'61.99', 	'22.17', 	'35.38', 	'76.12' ],
-      ['2018-04-10 07:03:00',	'10.00', 	'13.71', 	'29.21', 	'9.26' ],
-      ['2018-04-10 07:04:00',	'15.39', 	'78.18', 	'17.16', 	'74.36' ],
-    ]
-    return data
-  }
   onChartReady(chart) {
     chart.hideLoading();
   }
